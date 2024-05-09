@@ -48,25 +48,25 @@ jobs:
   #         git merge --no-ff ${{ github.event.pull_request.head.sha }}
   #         git push origin test
 
-  merge-to-master:
-    runs-on: ubuntu-latest
-    needs: test
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'test'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          ref: master
+  # merge-to-master:
+  #   runs-on: ubuntu-latest
+  #   needs: test
+  #   if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'test'
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: master
       
-      - name: Create PR to merge to master
-        run: |
-          git config user.name 'GitHub Actions'
-          git config user.email '<>'
-          git checkout -b merge-to-master
-          git merge --no-ff ${{ github.event.pull_request.head.sha }}
-          git push origin merge-to-master
-          hub pull-request -f -m "Merge test branch changes to master"
+  #     - name: Create PR to merge to master
+  #       run: |
+  #         git config user.name 'GitHub Actions'
+  #         git config user.email '<>'
+  #         git checkout -b merge-to-master
+  #         git merge --no-ff ${{ github.event.pull_request.head.sha }}
+  #         git push origin merge-to-master
+  #         hub pull-request -f -m "Merge test branch changes to master"
 
-      - name: Trigger Jenkins Job for Docker Image Build
-        run: |
-          # Logic to trigger Jenkins job for containerization and pushing to Docker Hub
+  #     - name: Trigger Jenkins Job for Docker Image Build
+  #       run: |
+  #         # Logic to trigger Jenkins job for containerization and pushing to Docker Hub
