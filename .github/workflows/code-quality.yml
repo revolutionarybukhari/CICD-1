@@ -21,26 +21,26 @@ jobs:
         run: |
           flake8 .
 
-  auto_merge_to_test:
-    needs: code_quality_check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+  # auto_merge_to_test:
+  #   needs: code_quality_check
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
 
-      - name: Configure Git
-        run: |
-          git config user.name 'GitHub Actions'
-          git config user.email 'actions@github.com'
+  #     - name: Configure Git
+  #       run: |
+  #         git config user.name 'GitHub Actions'
+  #         git config user.email 'actions@github.com'
 
-      - name: Merge dev into test and Push
-        run: |
-          git fetch origin
-          git checkout test || git checkout -b test
-          git merge origin/dev --no-ff --no-edit
-          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/revolutionaryanusha/CICD.git
-          git push origin test
-        env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  #     - name: Merge dev into test and Push
+  #       run: |
+  #         git fetch origin
+  #         git checkout test || git checkout -b test
+  #         git merge origin/dev --no-ff --no-edit
+  #         git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/revolutionaryanusha/CICD.git
+  #         git push origin test
+  #       env:
+  #         PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
