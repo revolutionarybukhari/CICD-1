@@ -1,44 +1,48 @@
 pipeline {
-    agent any
-    
     environment {
-        DOCKER_CREDENTIALS_ID = '38627808-a1ee-4df7-9831-b3cea1abaa28'
-        IMAGE_TAG = "anusha3172000/diabetes_prediction_app:${env.BUILD_ID}"
+        registry = "anusha172000/mlops_assignment_anusha_husnain" 
+        registryCredential = 'docker-hub-credentials' 
+        dockerImage = ''
     }
-    
+    agent any
     stages {
-        stage('Build') {
+        stage('Get Dockerfile from GitHub') {
+            steps {
+                git branch: 'main', url: 'https://github.com/revolutionaryanusha/CICD.git' 
+            }
+        }
+        stage('Build Docker image') {
             steps {
                 script {
-                    docker.build IMAGE_TAG
+                    dockerImage = docker.build(registry + ":$BUILD_NUMBER")
                 }
             }
         }
-        
-        stage('Publish') {
-            when {
-                branch 'master' // Only trigger this stage when changes are merged into master
-            }
+        stage('Push Docker image to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    script {
-                        docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
-                            docker.image(IMAGE_TAG).push()
-                        }
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        dockerImage.push()
                     }
                 }
             }
         }
-    }
-    
-    post {
-        success {
-            emailext(
-                to: 'anushazubair2000@gmail.com', // Specify the email address of the admin
-                subject: "Success: Deployment #${env.BUILD_NUMBER}",
-                body: "The deployment of build #${env.BUILD_NUMBER} to Docker Hub was successful.",
-                attachLog: true
-            )
+        stage('Send Email Notification') {
+            when {
+                branch 'main' 
+            }
+            steps {
+                script {
+                    // Sending email notification upon successful build
+                    emailext (
+                        to: 'i202454@nu.edu.pk', 
+                        subject: "Merging to  main branch ",
+                        body: "successful merge to the main branch was .",
+                        attachLog: true,
+                        mimeType: 'text/plain'
+                    )
+                }
+            }
         }
     }
 }
