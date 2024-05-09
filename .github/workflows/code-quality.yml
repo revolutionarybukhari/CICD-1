@@ -40,7 +40,7 @@ jobs:
           git fetch origin
           git checkout test || git checkout -b test
           git merge origin/dev --no-ff --no-edit
-          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/revolutionaryanusha/ModelFlow-CICD-Pipeline.git
+          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/revolutionaryanusha/CICD.git
           git push origin test
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
