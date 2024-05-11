@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Get Dockerfile from GitHub') {
             steps {
-                git branch: 'main', url: 'https://github.com/revolutionaryanusha/CICD.git' 
+                git branch: 'main', url: 'https://github.com/revolutionarybukhari/CICD-1' 
             }
         }
         stage('Build Docker image') {
@@ -35,7 +35,7 @@ pipeline {
                 script {
                     // Sending email notification upon successful build
                     emailext (
-                        to: 'i202454@nu.edu.pk', 
+                        to: 'i200626@nu.edu.pk', 
                         subject: "Merging to  main branch ",
                         body: "successful merge to the main branch was .",
                         attachLog: true,
